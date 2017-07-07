@@ -19,7 +19,20 @@ app.use(express.static(publicPath));//app to server static folder
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  //creates an event name of event and pass data
+  //socket.emit from Admin text welcome to the chat app to individual connected client
+  socket.emit('newMessage', {
+    from: 'Admin',
+    text: 'Welcome to the chat app',
+    createdAt: new Date().getTime()
+  });
+  //socket.broadcast.emit from Admin text so other clients know that new user has joined
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    text: 'New user joined',
+    createdAt: new Date().getTime()
+  });
+
+
 
 
   socket.on('disconnect', (socket) => {
@@ -33,11 +46,17 @@ io.on('connection', (socket) => {
 
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
+    //creates an event name of event and pass data
     io.emit('newMessage', {
       from: message.from,
       text: message.text,
       createdAt: new Date().getTime()
     }); //broadcasts message to every single connection
+    // socket.broadcast.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // }); //broadcasts message to every single connection
   });
 
 
