@@ -6,10 +6,7 @@ var socket = io();//intiates request to open up web socket and keep it open
 socket.on('connect', function() {
   console.log('Connected to server');
 
-  socket.emit('createMessage', {
-    to: 'aksfkskfs@gmail.com',
-    text: 'Hi'
-  });
+
 
 
 socket.on('disconnect',function() {
