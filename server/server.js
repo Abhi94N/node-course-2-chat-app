@@ -19,9 +19,32 @@ app.use(express.static(publicPath));//app to server static folder
 io.on('connection', (socket) => {
   console.log('New user connected');
 
+  //creates an event name of event and pass data
+
+
   socket.on('disconnect', (socket) => {
     console.log('Client disconnected from server');
   });
+
+  socket.on('createEmail', (newEmail) => {
+    console.log('createEmail', newEmail);
+  });
+
+  socket.emit('newMessage', {
+    from: 'Abhilash Nair',
+    text: "renga ha",
+    createdAt: 123
+  });
+
+  socket.on('createMessage', (newMessage) => {
+    console.log('createMessage', newMessage);
+  });
+
+
+
+
+
+
 });
 
 
