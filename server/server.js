@@ -2,7 +2,7 @@ const path = require('path');//use path for directory
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const {generateMessage} = require('./utils/message');
+const {generateMessage, generateLocationMessage} = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -37,12 +37,10 @@ io.on('connection', (socket) => {
     //creates an event name of event and pass data
     io.emit('newMessage',  generateMessage(message.from, message.text)); //broadcasts message to every single connection
     callback('This is from the server.'); //going to make call back when connection has been made
+  });
 
-    // socket.broadcast.emit('newMessage', {
-    //   from: message.from,
-    //   text: message.text,
-    //   createdAt: new Date().getTime()
-    // }); //broadcasts message to every single connection
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
   });
 
 
