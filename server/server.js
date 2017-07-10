@@ -32,15 +32,12 @@ io.on('connection', (socket) => {
     console.log('Client disconnected from server');
   });
 
-  socket.on('createEmail', (newEmail) => {
-    console.log('createEmail', newEmail);
-  });
-
-
-  socket.on('createMessage', (message) => {
+  socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
     //creates an event name of event and pass data
     io.emit('newMessage',  generateMessage(message.from, message.text)); //broadcasts message to every single connection
+    callback('This is from the server.'); //going to make call back when connection has been made
+
     // socket.broadcast.emit('newMessage', {
     //   from: message.from,
     //   text: message.text,
