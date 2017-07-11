@@ -2,7 +2,7 @@
 function scrollToBottom() {
   //Selectors
   var messages = $('#messages');
-  
+
   var newMessage = messages.children('li:last-child');
   //var newMessage = messages.childre
   //heights
@@ -25,13 +25,35 @@ var socket = io();//intiates request to open up web socket and keep it open
 
 //built in events
 socket.on('connect', function() {
-  console.log('Connected to server');
-
+  //deparam is a custom function for jquery
+  //window.location.search is a built in for
+  var params = $.deparam(window.location.search);
+  socket.emit('join', params, function(err) {
+    if(err) {
+      alert(err);
+      window.location.href = '/'; //go back to root page
+    } else {
+      console.log('No error');
+    }
+  });
 });
 
 
 socket.on('disconnect',function() {
   console.log('Disconnected to server');
+
+  //custom event that is created
+});
+
+socket.on('updateUserList', function(users) {//return users by name
+  console.log('Users list', users);
+  var ol = $('<ol></ol>');
+  users.forEach(function (user) {
+    ol.append($('<li></li>').text(user));
+  });
+
+  $('#users').html(ol);//wipe list and replace with ne version
+  
 });
 
 //custom events
