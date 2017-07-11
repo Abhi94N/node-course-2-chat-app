@@ -53,7 +53,7 @@ socket.on('updateUserList', function(users) {//return users by name
   });
 
   $('#users').html(ol);//wipe list and replace with ne version
-  
+
 });
 
 //custom events
@@ -98,7 +98,6 @@ $('#message-form').on('submit', function(event) {
   var messageTextbox = $('[name=message]')
   event.preventDefault();//prevent page refresh default
   socket.emit('createMessage', {
-    from: 'User',
     text: messageTextbox.val()
   }, function() {//call back for event acknowledgements
     messageTextbox.val('');//clear value

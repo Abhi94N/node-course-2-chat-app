@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {//disconnect doesn't take a socket id
     var user = users.removeUser(socket.id);
-    
+
     if(user) {
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));//avoids duplicating same user
       io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
@@ -54,14 +54,21 @@ io.on('connection', (socket) => {
   });
 
   socket.on('createMessage', (message, callback) => {
-    console.log('createMessage', message);
-    //creates an event name of event and pass data
-    io.emit('newMessage',  generateMessage(message.from, message.text)); //broadcasts message to every single connection
+    var user = users.getUser(socket.id);
+    if(user && isRealString(message.text)) {
+      //creates an event name of event and pass data
+      io.to(user.room).emit('newMessage',  generateMessage(user.name, message.text)); //broadcasts message to every single connection
+    }
+
     callback(); //going to make call back when connection has been made
   });
 
   socket.on('createLocationMessage', (coords) => {
-    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+    var user = users.getUser(socket.id);
+    if(user) {
+      io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+    }
+
   });
 
 
