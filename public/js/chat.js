@@ -1,8 +1,8 @@
-
+//auto scroll
 function scrollToBottom() {
   //Selectors
   var messages = $('#messages');
-  console.log(messages.children('li'));
+  
   var newMessage = messages.children('li:last-child');
   //var newMessage = messages.childre
   //heights
