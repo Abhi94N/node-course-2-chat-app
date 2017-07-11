@@ -23,25 +23,32 @@ socket.on('disconnect',function() {
 //posting a new message
 socket.on('newMessage', function (message) {
   var formattedTime = moment(message.createdAt).format('h:mm a');
-  var li = $('<li></li>');
-  var createdAt = moment(message.createdAt).format('h:mm a');
+  var template = $('#message-template').html();
+  //front end rendering
+  var html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });//pass pbjects to
 
-  li.text(`${message.from}: ${formattedTime}: ${message.text}`);
+  $('#messages').append(html);//must append object to div
 
-
-  $('#messages').append(li);
 
 });
 
 //new location message event handler
 socket.on('newLocationMessage', function (message) {
   var formattedTime = moment(message.createdAt).format('h:mm a');
-  var li = $('<li></li>');
-  var a = $('<a target="_blank">My current location</a>');
-  li.text(`${message.from}: ${formattedTime}: `);
-  a.attr('href', message.url);
-  li.append(a);
-  $('#messages').append(li);
+  var template = $('#location-message-template').html();
+
+  //template to render and data to render into the template
+  var html = Mustache.render(template, {
+    url: message.url,
+    from: message.from,
+    createdAt: formattedTime
+  });
+
+  $('#messages').append(html);
 });
 
 //form set up to submit messages
