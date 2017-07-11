@@ -1,7 +1,25 @@
 
+function scrollToBottom() {
+  //Selectors
+  var messages = $('#messages');
+  console.log(messages.children('li'));
+  var newMessage = messages.children('li:last-child');
+  //var newMessage = messages.childre
+  //heights
+  var clientHeight = messages.prop('clientHeight');
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  var lastMessageHeight = newMessage.prev().innerHeight();//get second to last item
 
+  if(scrollTop + clientHeight + newMessageHeight + lastMessageHeight >= scrollHeight) {
+    messages.scrollTop(scrollHeight); //brings it to the bottom of the message area
+  }
+
+}
 
 var socket = io();//intiates request to open up web socket and keep it open
+
 
 //cannot use Es6 arrow function for client side because of mobile, safari, ie
 
@@ -32,6 +50,7 @@ socket.on('newMessage', function (message) {
   });//pass pbjects to
 
   $('#messages').append(html);//must append object to div
+  scrollToBottom();
 
 
 });
@@ -49,6 +68,7 @@ socket.on('newLocationMessage', function (message) {
   });
 
   $('#messages').append(html);
+  scrollToBottom();
 });
 
 //form set up to submit messages
